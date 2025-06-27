@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claraprep Product Comparison</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4caf50;
+        --secondary-color: #2196f3;
+        --text-color: #333;
+        --light-gray: #f8f8f8;
+        --medium-gray: #e0e0e0;
+        --dark-gray: #555;
+        --white: #fff;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --border-radius: 8px;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: var(--light-gray);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .comparison-container {
+        max-width: 1400px; /* Wider container for side-by-side */
+        margin: 0 auto;
+        display: flex; /* Use flexbox for side-by-side columns */
+        gap: 30px; /* Space between columns */
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 30px;
+        overflow-x: auto; /* Enable horizontal scroll if content overflows */
+      }
+
+      .product-column {
+        flex: 1; /* Each column takes equal width */
+        min-width: 45%; /* Minimum width for each column before wrapping */
+        padding: 20px;
+        border: 1px solid var(--medium-gray);
+        border-radius: var(--border-radius);
+        background-color: var(--white);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .product-column h2.column-title {
+        text-align: center;
+        font-size: 1.8em;
+        color: var(--dark-gray);
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--primary-color);
+      }
+      .product-column.enhanced-col h2.column-title {
+        border-bottom-color: var(--secondary-color);
+      }
+
+      /* Product Page Layout */
+      .product-images {
+        width: 100%; /* Take full width of its column */
+        margin-bottom: 20px;
+      }
+
+      .main-image {
+        width: 100%;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 15px;
+      }
+
+      .thumbnail-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+      }
+
+      .thumbnail-images img {
+        width: 100%;
+        height: 80px; /* Fixed height for thumbnails */
+        object-fit: cover; /* Ensures images cover the area */
+        border-radius: 5px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease-in-out;
+      }
+
+      .thumbnail-images img.active,
+      .thumbnail-images img:hover {
+        border-color: var(--primary-color);
+      }
+
+      /* Common Product Details */
+      h1 {
+        font-size: 2.2em; /* Slightly smaller for columns */
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: var(--dark-gray);
+      }
+
+      h3 {
+        /* Used for section titles within columns */
+        font-size: 1.3em;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        color: var(--dark-gray);
+        border-bottom: 1px solid var(--medium-gray);
+        padding-bottom: 5px;
+      }
+
+      .vendor,
+      .product-type {
+        font-size: 0.9em;
+        color: var(--dark-gray);
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+
+      .price {
+        font-size: 1.8em; /* Slightly smaller for columns */
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+      }
+
+      .description,
+      .usage-info,
+      .section-content p {
+        font-size: 1em;
+        color: var(--text-color);
+        margin-bottom: 15px;
+      }
+
+      .tags-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 20px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tags-list li {
+        background-color: var(--medium-gray);
+        color: var(--dark-gray);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+      }
+
+      /* Enhanced Data Specific Styles */
+      .enhanced-col .price {
+        color: var(--secondary-color);
+      }
+
+      .section-content {
+        margin-bottom: 20px; /* Spacing between sections */
+      }
+
+      .section-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .section-content ul li {
+        margin-bottom: 8px;
+        padding-left: 25px;
+        position: relative;
+      }
+
+      .section-content ul li:before {
+        font-size: 1em;
+        position: absolute;
+        left: 0;
+      }
+
+      .benefits ul li:before {
+        content: "✅";
+        color: var(--primary-color);
+      }
+
+      .warnings ul li:before {
+        content: "⚠️";
+        color: #ffc107; /* Amber for warning */
+      }
+
+      .certifications ul li:before {
+        content: "🏅";
+        color: #ffd700; /* Gold for certification */
+      }
+
+      /* General bullet for other lists */
+      .ingredients ul li:before,
+      .target-audience ul li:before,
+      .skin-types ul li:before,
+      .recommended-with ul li:before,
+      .avoid-with ul li:before,
+      .concerns ul li:before,
+      .key-features ul li:before {
+        content: "•";
+        font-weight: bold;
+        color: var(--dark-gray);
+      }
+
+      .competitor-item {
+        background-color: var(--light-gray);
+        border-radius: var(--border-radius);
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        font-size: 0.95em;
+      }
+
+      .competitor-item strong {
+        color: var(--secondary-color);
+      }
+
+      .review-insight-item {
+        background-color: var(--light-gray);
+        border-radius: var(--border-radius);
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        font-size: 0.95em;
+      }
+
+      .review-insight-item strong {
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      /* Responsive Design for comparison layout */
+      @media (max-width: 1024px) {
+        .comparison-container {
+          flex-direction: column; /* Stack columns on smaller screens */
+          gap: 20px;
+        }
+        .product-column {
+          min-width: 100%; /* Each column takes full width when stacked */
+        }
+      }
+      @media (max-width: 768px) {
+        body {
+          padding: 15px;
+        }
+        .comparison-container {
+          padding: 20px;
+        }
+        .product-column {
+          padding: 15px;
+        }
+        h1 {
+          font-size: 2em;
+        }
+        .price {
+          font-size: 1.6em;
+        }
+        h3 {
+          font-size: 1.2em;
+        }
+        .thumbnail-images img {
+          height: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="comparison-container">
+      <div id="initialDataColumn" class="product-column initial-col">
+        <h2 class="column-title">Initial Product Data</h2>
+      </div>
+
+      <div id="enhancedDataColumn" class="product-column enhanced-col">
+        <h2 class="column-title">Enhanced Product Data</h2>
+      </div>
+    </div>
+
+    <script>
+      const initialData = {
+        id: "gid://shopify/Product/5801534095523",
+        title: "Claraprep",
+        description:
+          "Every skincare regimen needs a solid foundation. Our cleanser lathers away dirt, oil, and other environmental pollutants to leave skin feeling clean and refreshed. Gently exfoliates the skin removing pore-clogging debris to reveal a clearer complexion Restores a youthful glow and re-volumizes skin Locks in moisture for a more hydrated and smoother skin appearance Dermatologist tested and hypoallergenic INGREDIENTS: Myristic Acid, Glycerin, Cocamidopropyl Betaine, Stearic Acid, Sodium Methyl Cocoyl Taurate, Potassium Hydroxide, Glycol Distearate, Dimethicone, Propylene Glycol, Polysorbate 20, Titanium Dioxide, Potassium Sorbate, Menthol, Magnesium Chloride, Magnesium Nitrate, Methylchloroisothiazolinone, Methylisothiazolinone, Fragrance, Disodium EDTA INCLUDES: (1) Claraprep HOW TO: Dispense 1-2 pumps of cleanser onto palm of hand, and combine with water to create a generous lather. Using small, circular motions, gently wash the desired treatment area. Rinse thoroughly with water and pat dry. How To Video",
+        handle: "claraprep",
+        productType: "Skincare",
+        vendor: "Dermaclara",
+        tags: [
+          "AAFES",
+          "Belly",
+          "Chest",
+          "Eyes",
+          "Forehead",
+          "moisturizer/cleanser",
+          "Mouth",
+          "Preventative",
+          "Skincare",
+        ],
+        createdAt: "2020-10-26T19:57:06Z",
+        updatedAt: "2025-06-22T01:35:02Z",
+        images: [
+          {
+            id: "gid://shopify/ProductImage/37989510217891",
+            url: "https://cdn.shopify.com/s/files/1/0503/6248/2851/files/Cream-to-Foam-Cleanser_a81a7a77-e4c4-48b0-bca3-a3ea60a773c9.jpg?v=1700669316",
+            altText: null,
+          },
+          {
+            id: "gid://shopify/ProductImage/37989511069859",
+            url: "https://cdn.shopify.com/s/files/1/0503/6248/2851/files/Claraprep-_2_-1x1-Image_371cfc43-e405-4cc7-a4fe-5f73139049ec.jpg?v=1700669323",
+            altText: null,
+          },
+          {
+            id: "gid://shopify/ProductImage/37989511266467",
+            url: "https://cdn.shopify.com/s/files/1/0503/6248/2851/files/Claraprep-_1_-1x1-Image_357bf8c6-61ed-4bd5-a6b3-9c99c10bbc58.jpg?v=1700669332",
+            altText: null,
+          },
+          {
+            id: "gid://shopify/ProductImage/37989511856291",
+            url: "https://cdn.shopify.com/s/files/1/0503/6248/2851/files/Claraprep-_3_-1x1-Image_5eac9f01-4485-4bc3-8e89-a6a085444044.jpg?v=1700669339",
+            altText: null,
+          },
+          {
+            id: "gid://shopify/ProductImage/37989512085667",
+            url: "https://cdn.shopify.com/s/files/1/0503/6248/2851/files/Claraprep-1x1-Image_21303b8c-2ad3-45e3-8ee6-71457c0c79da.jpg?v=1700669345",
+            altText: null,
+          },
+        ],
+        variants: [
+          {
+            id: "gid://shopify/ProductVariant/36772942676131",
+            title: "Default Title",
+            price: "33.0",
+            availableForSale: true,
+            sku: "DC-PREP-150",
+            weight: 0,
+            weightUnit: "OUNCES",
+          },
+        ],
+        options: [
+          {
+            id: "gid://shopify/ProductOption/7428851269795",
+            name: "Title",
+            values: ["Default Title"],
+          },
+        ],
+      };
+
+      const enhancedData = {
+        manufacturer: "Dermaclara",
+        ingredients: [
+          "Myristic Acid",
+          "Glycerin",
+          "Cocamidopropyl Betaine",
+          "Stearic Acid",
+          "Sodium Methyl Cocoyl Taurate",
+          "Potassium Hydroxide",
+          "Glycol Distearate",
+          "Dimethicone",
+          "Propylene Glycol",
+          "Polysorbate 20",
+          "Titanium Dioxide",
+          "Potassium Sorbate",
+          "Menthol",
+          "Magnesium Chloride",
+          "Magnesium Nitrate",
+          "Methylchloroisothiazolinone",
+          "Methylisothiazolinone",
+          "Fragrance",
+          "Disodium EDTA",
+        ],
+        benefits: [
+          "Enhances the adhesion and effectiveness of Dermaclara silicone patches",
+          "Gently exfoliates to remove pore-clogging debris",
+          "Cleanses away dirt, oil, and pollutants without stripping natural oils",
+          "Locks in moisture, leaving skin hydrated and smooth",
+          "Restores a youthful glow and helps re-volumize skin",
+          "Prepares skin for better absorption of other skincare products",
+        ],
+        targetAudience: [
+          "Users of Dermaclara's silicone patch system",
+          "Individuals aged 25-55 seeking anti-aging and preventative skincare",
+          "Consumers with dry, sensitive, or normal skin in need of a gentle, hydrating cleanser",
+          "Customers looking for a multi-use cleanser for face and body (e.g., chest, belly)",
+        ],
+        productCategory: "Hydrating Cream Cleanser",
+        keyFeatures: [
+          "Hydrating cream-to-foam formula",
+          "Specifically formulated to prepare skin for Dermaclara silicone patches",
+          "Gently exfoliates to remove pore-clogging debris",
+          "Dermatologist tested and hypoallergenic",
+          "Locks in moisture post-cleansing",
+        ],
+        usage:
+          "Dispense 1-2 pumps into palm and combine with water to create a generous lather. Using small, circular motions, gently massage onto the desired treatment area (face, chest, belly, etc.). Rinse thoroughly with water and pat dry. Recommended for use twice daily (morning and night) to cleanse skin or as needed before applying Dermaclara silicone patches.",
+        warnings: [
+          "Contains fragrance, menthol, and preservatives (Methylchloroisothiazolinone, Methylisothiazolinone) which may cause irritation in individuals with very sensitive skin. As with any new product, patch testing is recommended.",
+        ],
+        certifications: ["Dermatologist tested", "Hypoallergenic"],
+        packaging:
+          "A tall, cylindrical, opaque white bottle with a white pump dispenser and a clear, frosted plastic cap. The branding and text are printed directly onto the bottle in a minimalist style, using gold/yellow and black fonts.",
+        size: "150ml | 5 fl oz",
+        extractedText:
+          "dc\n" +
+          "claraprep\n" +
+          "PURIFY\n" +
+          "hydrating cream cleanser\n" +
+          "dermaclara\n" +
+          "youth science\n" +
+          "150ml\n" +
+          "5 fl oz\n" +
+          "LOCKS IN MOISTURE TO LEAVE SKIN HYDRATED & SMOOTH\n" +
+          "LATHERS AWAY DIRT, OIL, & OTHER POLLUTANTS\n" +
+          "RESTORES YOUTHFUL GLOW & RE-VOLUMIZES SKIN\n" +
+          "GENTLY EXFOLIATES REMOVING PORE-CLOGGING DEBRIS",
+        skinTypes: [
+          "Dry",
+          "Sensitive",
+          "Normal",
+          "Combination",
+          "Acne-prone (with caution, as some users report initial breakouts)",
+        ],
+        ageGroup: "25-55",
+        usageFrequency:
+          "Twice daily (morning and night) as a standard cleanser, or as needed for patch preparation.",
+        resultsTimeline:
+          "Immediate: Skin feels soft, hydrated, and clean after each use. Long-term: With consistent use, expect improved skin texture and hydration. When used with Dermaclara patches, it enhances the patch's wrinkle-reducing effectiveness.",
+        pricePoint: "mid-range",
+        texture:
+          "The product appears as a white cream when pumped. When used as a cleanser, it lathers into a light, white foam. It can also be applied as a thicker cream, as shown on the pregnant belly.",
+        uniqueSellingPoint:
+          "Specifically formulated to work in conjunction with Dermaclara's silicone patches, enhancing their adhesion and effectiveness. Its gentle and hydrating properties appeal to a wide range of skin types, including those sensitive to harsher cleansers.",
+        concerns: [
+          "Does not effectively remove heavy makeup, may require a separate makeup remover.",
+          "Contains fragrance and preservatives that can be irritating to highly sensitive skin.",
+          "Some users report experiencing minor initial breakouts.",
+        ],
+        scent: "Lightly fragranced, described as pleasant by reviewers.",
+        recommendedWith: [
+          "Dermaclara silicone patches (face and body)",
+          "Claraline peptide serum (Dermaclara)",
+          "Clarasome radiance restoring moisturizer (Dermaclara)",
+        ],
+        avoidWith: [
+          "No specific product combinations to avoid have been identified, but it is advisable to introduce it gradually and monitor for adverse reactions when used with other active ingredients like retinoids or acids.",
+        ],
+        competitors: [
+          {
+            name: "Vitamin C Face Wash",
+            brand: "Mamaearth",
+            price: "Varies",
+            keyDifference:
+              "Focuses on brightening and acne treatment using vitamin C.",
+          },
+          {
+            name: "Salyzap Daily Face Cleanser",
+            brand: "Fixderma",
+            price: "Varies",
+            keyDifference:
+              "Salicylic acid-based cleanser targeting acne and oily skin.",
+          },
+        ],
+        marketPosition:
+          "Positioned as a mid-range, hydrating preparatory cleanser, Claraprep primarily serves as a companion product to Dermaclara's main silicone patch line. It targets the anti-aging market by offering a gentle, non-stripping cleanse that enhances the effectiveness of occlusion therapy (silicone patches), setting it apart from ingredient-focused competitors (e.g., Vitamin C or Salicylic Acid cleansers).",
+        reviewInsights: [
+          "Positive: Praised for being gentle, hydrating, and effective for sensitive skin, leaving it soft with a pleasant scent.",
+          "Negative: Criticized for not effectively removing heavy makeup and causing initial minor breakouts in some users.",
+        ],
+        safetyProfile:
+          "Dermatologist tested and hypoallergenic. The formula includes gentle surfactants (Myristic Acid, Cocamidopropyl Betaine), humectants (Glycerin, Propylene Glycol), and emollients (Dimethicone) to cleanse without stripping moisture. It contains potential irritants for sensitive individuals, including Fragrance, Menthol, and the preservatives Methylchloroisothiazolinone and Methylisothiazolinone.",
+      };
+
+      const initialDataColumn = document.getElementById("initialDataColumn");
+      const enhancedDataColumn = document.getElementById("enhancedDataColumn");
+
+      function renderInitialData(data) {
+        let imagesHtml = "";
+        if (data.images && data.images.length > 0) {
+          imagesHtml = `
+                    <div class="product-images">
+                        <img src="${data.images[0].url}" alt="${
+            data.title
+          }" class="main-image" id="initialMainImage">
+                        <div class="thumbnail-images">
+                            ${data.images
+                              .map(
+                                (img, index) => `
+                                <img src="${img.url}" alt="${
+                                  img.altText || data.title
+                                }" onclick="changeMainImage('${
+                                  img.url
+                                }', this, 'initialMainImage')" ${
+                                  index === 0 ? 'class="active"' : ""
+                                }>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                `;
+        }
+
+        let tagsHtml = "";
+        if (data.tags && data.tags.length > 0) {
+          tagsHtml = `
+                    <div class="section-content">
+                        <h3>Product Tags</h3>
+                        <ul class="tags-list">
+                            ${data.tags
+                              .map((tag) => `<li>${tag}</li>`)
+                              .join("")}
+                        </ul>
+                    </div>
+                `;
+        }
+
+        initialDataColumn.innerHTML += `
+                ${imagesHtml}
+                <h1>${data.title || ""}</h1>
+                ${
+                  data.vendor
+                    ? `<p class="vendor"><strong>Vendor:</strong> ${data.vendor}</p>`
+                    : ""
+                }
+                ${
+                  data.productType
+                    ? `<p class="product-type"><strong>Product Type:</strong> ${data.productType}</p>`
+                    : ""
+                }
+                ${
+                  data.variants &&
+                  data.variants.length > 0 &&
+                  data.variants[0].price
+                    ? `<p class="price">$${parseFloat(
+                        data.variants[0].price
+                      ).toFixed(2)}</p>`
+                    : ""
+                }
+
+                ${
+                  data.description
+                    ? `
+                    <div class="section-content">
+                        <h3>Description</h3>
+                        <p class="description">${data.description
+                          .replace(
+                            /INGREDIENTS:([^]+?)INCLUDES:/,
+                            "<strong>INGREDIENTS:</strong> $1<br><br><strong>INCLUDES:</strong>"
+                          )
+                          .replace(
+                            /HOW TO:([^]+)/,
+                            "<br><br><strong>HOW TO:</strong> $1"
+                          )}</p>
+                    </div>
+                `
+                    : ""
+                }
+
+                ${tagsHtml}
+            `;
+      }
+
+      function renderEnhancedData(data) {
+        // Re-use images from initialData for consistency if not provided in enhanced
+        const productImages = initialData.images; // Assuming images are consistent or only in initial
+        let imagesHtml = "";
+        if (productImages && productImages.length > 0) {
+          imagesHtml = `
+                    <div class="product-images">
+                        <img src="${productImages[0].url}" alt="${
+            initialData.title
+          }" class="main-image" id="enhancedMainImage">
+                        <div class="thumbnail-images">
+                            ${productImages
+                              .map(
+                                (img, index) => `
+                                <img src="${img.url}" alt="${
+                                  img.altText || initialData.title
+                                }" onclick="changeMainImage('${
+                                  img.url
+                                }', this, 'enhancedMainImage')" ${
+                                  index === 0 ? 'class="active"' : ""
+                                }>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                `;
+        }
+
+        let benefitsHtml =
+          data.benefits && data.benefits.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Benefits</h3>
+                    <ul class="benefits">${data.benefits
+                      .map((benefit) => `<li>${benefit}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let keyFeaturesHtml =
+          data.keyFeatures && data.keyFeatures.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Key Features</h3>
+                    <ul class="key-features">${data.keyFeatures
+                      .map((feature) => `<li>${feature}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let warningsHtml =
+          data.warnings && data.warnings.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Warnings</h3>
+                    <ul class="warnings">${data.warnings
+                      .map((warning) => `<li>${warning}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let certificationsHtml =
+          data.certifications && data.certifications.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Certifications</h3>
+                    <ul class="certifications">${data.certifications
+                      .map((cert) => `<li>${cert}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let competitorsHtml =
+          data.competitors && data.competitors.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Competitors</h3>
+                    <div class="competitors">
+                        ${data.competitors
+                          .map(
+                            (comp) => `
+                            <div class="competitor-item">
+                                <strong>${comp.name || ""}</strong> (by ${
+                              comp.brand || ""
+                            }) - Price: ${comp.price || "N/A"}<br>
+                                Key Difference: ${comp.keyDifference || "N/A"}
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            `
+            : "";
+
+        let reviewInsightsHtml =
+          data.reviewInsights && data.reviewInsights.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Review Insights</h3>
+                    <div class="review-insights">
+                        ${data.reviewInsights
+                          .map(
+                            (insight) => `
+                            <div class="review-insight-item">
+                                <strong>${
+                                  insight.split(":")[0]
+                                }</strong>${insight.substring(
+                              insight.indexOf(":")
+                            )}
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            `
+            : "";
+
+        let ingredientsListHtml =
+          data.ingredients && data.ingredients.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Ingredients</h3>
+                    <ul class="ingredients">${data.ingredients
+                      .map((ing) => `<li>${ing}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let recommendedWithHtml =
+          data.recommendedWith && data.recommendedWith.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Recommended With</h3>
+                    <ul class="recommended-with">${data.recommendedWith
+                      .map((rec) => `<li>${rec}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let avoidWithHtml =
+          data.avoidWith && data.avoidWith.length > 0
+            ? `
+                <div class="section-content">
+                    <h3>Avoid With</h3>
+                    <ul class="avoid-with">${data.avoidWith
+                      .map((avoid) => `<li>${avoid}</li>`)
+                      .join("")}</ul>
+                </div>
+            `
+            : "";
+
+        let skinTypesHtml =
+          data.skinTypes && data.skinTypes.length > 0
+            ? `
+                <p><strong>Skin Types:</strong></p>
+                <ul class="skin-types">${data.skinTypes
+                  .map((type) => `<li>${type}</li>`)
+                  .join("")}</ul>
+            `
+            : "";
+
+        let targetAudienceHtml =
+          data.targetAudience && data.targetAudience.length > 0
+            ? `
+                <p><strong>Target Audience:</strong></p>
+                <ul class="target-audience">${data.targetAudience
+                  .map((audience) => `<li>${audience}</li>`)
+                  .join("")}</ul>
+            `
+            : "";
+
+        let concernsHtml =
+          data.concerns && data.concerns.length > 0
+            ? `
+                <p><strong>Other Concerns:</strong></p>
+                <ul class="concerns">${data.concerns
+                  .map((concern) => `<li>${concern}</li>`)
+                  .join("")}</ul>
+            `
+            : "";
+
+        enhancedDataColumn.innerHTML += `
+                ${imagesHtml}
+                <h1>${
+                  initialData.title || ""
+                } <span style="font-size: 0.6em; color: var(--secondary-color);">(${
+          data.productCategory || ""
+        })</span></h1>
+                ${
+                  data.manufacturer
+                    ? `<p class="vendor"><strong>Manufacturer:</strong> ${data.manufacturer}</p>`
+                    : ""
+                }
+                ${
+                  initialData.variants &&
+                  initialData.variants.length > 0 &&
+                  initialData.variants[0].price
+                    ? `<p class="price">$${parseFloat(
+                        initialData.variants[0].price
+                      ).toFixed(2)}</p>`
+                    : ""
+                }
+
+                <div class="section-content">
+                    <h3>Product Overview</h3>
+                    ${
+                      initialData.description
+                        ? `<p>${initialData.description}</p>`
+                        : ""
+                    }
+                    ${
+                      data.size
+                        ? `<p><strong>Size:</strong> ${data.size}</p>`
+                        : ""
+                    }
+                    ${
+                      data.texture
+                        ? `<p><strong>Texture:</strong> ${data.texture}</p>`
+                        : ""
+                    }
+                    ${
+                      data.scent
+                        ? `<p><strong>Scent:</strong> ${data.scent}</p>`
+                        : ""
+                    }
+                    ${
+                      data.packaging
+                        ? `<p><strong>Packaging:</strong> ${data.packaging}</p>`
+                        : ""
+                    }
+                    ${
+                      data.uniqueSellingPoint
+                        ? `<p><strong>Unique Selling Point:</strong> ${data.uniqueSellingPoint}</p>`
+                        : ""
+                    }
+                    ${
+                      data.marketPosition
+                        ? `<p><strong>Market Position:</strong> ${data.marketPosition}</p>`
+                        : ""
+                    }
+                </div>
+
+                ${keyFeaturesHtml}
+                ${benefitsHtml}
+
+                <div class="section-content">
+                    <h3>Usage & Application</h3>
+                    ${
+                      data.usage
+                        ? `<p class="usage-info"><strong>How To:</strong> ${data.usage}</p>`
+                        : ""
+                    }
+                    ${
+                      data.usageFrequency
+                        ? `<p><strong>Usage Frequency:</strong> ${data.usageFrequency}</p>`
+                        : ""
+                    }
+                    ${
+                      data.resultsTimeline
+                        ? `<p><strong>Results Timeline:</strong> ${data.resultsTimeline}</p>`
+                        : ""
+                    }
+                </div>
+
+                ${ingredientsListHtml}
+
+                <div class="section-content">
+                    <h3>Target Audience & Skin Types</h3>
+                    ${targetAudienceHtml}
+                    ${skinTypesHtml}
+                    ${
+                      data.ageGroup
+                        ? `<p><strong>Age Group:</strong> ${data.ageGroup}</p>`
+                        : ""
+                    }
+                </div>
+
+                ${warningsHtml}
+                ${concernsHtml}
+
+                ${certificationsHtml}
+                ${
+                  data.safetyProfile
+                    ? `
+                    <div class="section-content">
+                        <h3>Safety Profile</h3>
+                        <p>${data.safetyProfile}</p>
+                    </div>
+                `
+                    : ""
+                }
+
+                ${recommendedWithHtml}
+                ${avoidWithHtml}
+                ${competitorsHtml}
+                ${reviewInsightsHtml}
+            `;
+      }
+
+      function changeMainImage(imageUrl, clickedThumbnail, mainImageId) {
+        document.getElementById(mainImageId).src = imageUrl;
+
+        // Remove active class from all thumbnails in the current column and add to the clicked one
+        const thumbnails = clickedThumbnail
+          .closest(".thumbnail-images")
+          .querySelectorAll("img");
+        thumbnails.forEach((img) => img.classList.remove("active"));
+        clickedThumbnail.classList.add("active");
+      }
+
+      // Initial render for both columns
+      document.addEventListener("DOMContentLoaded", () => {
+        renderInitialData(initialData);
+        renderEnhancedData(enhancedData);
+      });
+    </script>
+  </body>
+</html>
